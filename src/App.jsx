@@ -25,11 +25,20 @@ function Nav() {
     </nav>
   );
 }
+function MyArticle() {
+  <section>
+    <article>
+      <h2>HTML</h2>
+      <p>Hypertext Markup Language</p>
+    </article>
+  </section>;
+}
 function App() {
   return (
     <>
       <MyHeader />
       <Nav />
+      <MyArticle />
     </>
   );
 }
