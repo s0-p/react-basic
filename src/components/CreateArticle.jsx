@@ -7,7 +7,7 @@ function CreateArticle({ onSubmit }) {
         action=""
         onSubmit={(e) => {
           e.preventDefault();
-          onSubmit(e.target.title.value, e.target.desc.value);
+          onSubmit(e.target.title.value, e.target.desc.value, e.target.diff.value);
         }}
       >
         <div>
