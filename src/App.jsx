@@ -3,8 +3,8 @@ import Myheader from './components/Myheader';
 import Nav from './components/Nav';
 import MyArticle from './components/MyArticle';
 import { useState, useCallback, useMemo } from 'react';
-import Controls from './components/Controls';
-import CreateArticle from './components/CreateArticle';
+import Controls from './components/controls';
+import CreateArticle from './components/createArticle';
 import UpdateArticle from './components/UpdateArticle';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -17,7 +17,12 @@ function App() {
     desc: '기본언어인 html, css, javascript부터 학습합니다.',
   });
   const [content, setContent] = useState([
-    { id: '1', title: 'UI/UX 개발', desc: '사용자 경험을 고려한 직관적이고 반응성 높은 화면 구현', level: 1 },
+    {
+      id: '1',
+      title: 'UI/UX 개발',
+      desc: '사용자 경험을 고려한 직관적이고 반응성 높은 화면 구현',
+      level: 1,
+    },
     {
       id: '2',
       title: '재사용이 가능한 UI 개발',
@@ -45,73 +50,71 @@ function App() {
   const handleDelete = () => {
     if (window.confirm('정말 삭제할까요')) {
       setContent((prev) => prev.filter((item) => item.id !== id));
-      setMode('welcome');
-    } else {
-      setMode('welcome');
     }
+    setMode('welcome');
+  };
+  const handleSubmitCreate = (_title, _desc, _level) => {
+    const newId = uuidv4();
+
+    let _contents = content.concat({
+      id: newId,
+      title: _title,
+      desc: _desc,
+      level: _level,
+    });
+    setContent(_contents);
+    // setMaxid(newId);
+    setId(newId);
+    setMode('read');
+  };
+  const handleSubmitUpdate = (_title, _desc, _level) => {
+    setContent((prev) =>
+      prev.map((p) =>
+        p.id === id
+          ? {
+              ...p,
+              title: _title,
+              desc: _desc,
+              level: _level,
+            }
+          : p,
+      ),
+    );
+    setMode('read');
   };
 
-  if (mode === 'welcome') {
-    _title = welcome.title;
-    _desc = welcome.desc;
-    _article = <MyArticle title={_title} desc={_desc} />;
-  } else if (mode === 'read') {
-    if (selectedArticle) {
-      _title = selectedArticle.title;
-      _desc = selectedArticle.desc;
-      _level = selectedArticle.level;
+  const renderArticle = () => {
+    switch (mode) {
+      case 'read':
+        return (
+          <MyArticle
+            title={selectedArticle?.title ?? welcome.title}
+            desc={selectedArticle?.desc ?? welcome.desc}
+            level={selectedArticle?.level ?? welcome.level}
+            onChangeMode={() => {
+              setMode('update');
+            }}
+            onDelete={handleDelete}
+          />
+        );
+
+      case 'create':
+        return <CreateArticle onSubmit={handleSubmitCreate} />;
+
+      case 'update':
+        return (
+          <UpdateArticle
+            title={selectedArticle.title}
+            desc={selectedArticle.desc}
+            level={selectedArticle.level}
+            onSubmit={handleSubmitUpdate}
+          />
+        );
+
+      default: //welcome
+        return <MyArticle title={welcome.title} desc={welcome.desc} />;
     }
-    _article = (
-      <MyArticle
-        title={_title}
-        desc={_desc}
-        level={_level}
-        onChangeMode={() => {
-          setMode('update');
-        }}
-        onDelete={handleDelete}
-      />
-    );
-  } else if (mode === 'create') {
-    _article = (
-      <CreateArticle
-        onSubmit={(_title, _desc, _level) => {
-          const newId = uuidv4();
-
-          let _contents = content.concat({ id: newId, title: _title, desc: _desc, level: _level });
-          setContent(_contents);
-          // setMaxid(newId);
-          setId(newId);
-          setMode('read');
-        }}
-      />
-    );
-  } else if (mode === 'update') {
-    if (!selectedArticle) return null;
-
-    _article = (
-      <UpdateArticle
-        title={selectedArticle.title}
-        desc={selectedArticle.desc}
-        level={selectedArticle.level}
-        onSubmit={(_title, _desc, _level) => {
-          setContent((prev) =>
-            prev.map((p) =>
-              p.id === id
-                ? {
-                    ...p,
-                    title: _title,
-                    desc: _desc,
-                    level: _level,
-                  }
-                : p,
-            ),
-          );
-          setMode('read');
-        }}
-      />
-    );
-  }
+  };
 
   const handleChangeMode = useCallback((_id) => {
     console.log(_id);
@@ -141,7 +144,7 @@ function App() {
         <p>{subject.desc}</p>
       </header> */}
       <Nav data={content} onChangeMode={handleChangeMode} />
-      {_article}
+      {renderArticle()}
       <hr />
       <Controls
         onChangeMode={() => {
