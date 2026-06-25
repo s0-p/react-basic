@@ -4,7 +4,7 @@ function ArticleForm({ initTitle = '', initDesc = '', initLevel = '', onSubmit }
   const [content, setContent] = useState({
     title: initTitle,
     desc: initDesc,
-    diff: initLevel,
+    level: initLevel,
   });
 
   const handleChange = (e) => {
@@ -22,7 +22,7 @@ function ArticleForm({ initTitle = '', initDesc = '', initLevel = '', onSubmit }
         action=''
         onSubmit={(e) => {
           e.preventDefault();
-          onSubmit(content.title, content.desc, content.diff);
+          onSubmit(content.title, content.desc, content.level);
         }}
       >
         <div>
@@ -34,8 +34,8 @@ function ArticleForm({ initTitle = '', initDesc = '', initLevel = '', onSubmit }
           <textarea name='desc' id='desc' value={content.desc} onChange={handleChange}></textarea>
         </div>
         <div>
-          <label htmlFor='diff'>diff</label>
-          <input type='number' name='diff' id='diff' value={content.diff} onChange={handleChange} />
+          <label htmlFor='level'>level</label>
+          <input type='number' name='level' id='level' value={content.level} onChange={handleChange} />
         </div>
         <button>Submit</button>
       </form>

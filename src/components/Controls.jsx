@@ -1,7 +1,7 @@
 function Controls({ onChangeMode }) {
-  console.log("Controls render");
+  console.log('Controls render');
   return (
-    <div className="menu">
+    <div className='menu'>
       <button
         onClick={() => {
           onChangeMode();

@@ -1,11 +1,11 @@
 import { useState } from 'react';
 
-function UpdateArticle({ title, desc, diff, onSubmit }) {
+function UpdateArticle({ title, desc, level, onSubmit }) {
   console.log('UpdateArticle render');
   const [content, setContent] = useState({
     title: title,
     desc: desc,
-    diff: diff,
+    level: level,
   });
   // const [newTitle, setNewTitle] = useState(title);
   // const [newDesc, setNewDesc] = useState(desc);
@@ -20,7 +20,7 @@ function UpdateArticle({ title, desc, diff, onSubmit }) {
   return (
     <>
       <h2>Update Article</h2>
-      <ArticleForm initTitle={title} initDesc={desc} initLevel={diff} onSubmit={onSubmit} />
+      <ArticleForm initTitle={title} initDesc={desc} initLevel={level} onSubmit={onSubmit} />
     </>
   );
 }
